@@ -17,6 +17,14 @@ app.use(express.json());
 app.use("/api/categories",categoryRoutes);
 app.use("/api/products",productRoutes);
 app.use("/api/auth",authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/coupons", couponRoutes);
+app.use("/api/banners", bannerRoutes);
+
+
 
 app.get("/",(req,res)=>{
 res.send("AUREX API Running");
