@@ -11,8 +11,8 @@ const couponRoutes = require("./routes/coupon.routes");
 const bannerRoutes = require("./routes/banner.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const userRoutes = require("./routes/user.routes");
-const contactRoutes = require("./routes/contact.routes");
 const cartRoutes = require("./routes/cart.routes");
+const contactRoutes = require("./routes/contact.routes");
 
 const app = express();
 
@@ -28,8 +28,8 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/contact", contactRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.get("/",(req,res)=>{
 res.send("AUREX API Running");
