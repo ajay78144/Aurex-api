@@ -1,119 +1,104 @@
-const cart = require("../models/cart");
+const Cart = require("../models/Cart");
 
 // Add To Cart
-const addToCart = async (req,res)=>{
+const addToCart = async (req, res) => {
+  try {
 
-try{
+    const cart = await Cart.create(req.body);
 
-const cart = await Cart.create(req.body);
+    res.status(201).json(cart);
 
-res.status(201).json(cart);
+  } catch (error) {
 
-}
-catch(error){
+    res.status(500).json({
+      message: error.message
+    });
 
-res.status(500).json({
-message:error.message
-});
-
-}
-
+  }
 };
 
-// Get Cart
-const getCart = async (req,res)=>{
+// Get Cart Items
+const getCart = async (req, res) => {
+  try {
 
-try{
+    const cartItems = await Cart.find()
+      .populate("user")
+      .populate("product");
 
-const cartItems = await Cart.find()
-.populate("user")
-.populate("product");
+    res.json(cartItems);
 
-res.json(cartItems);
+  } catch (error) {
 
-}
-catch(error){
+    res.status(500).json({
+      message: error.message
+    });
 
-res.status(500).json({
-message:error.message
-});
-
-}
-
+  }
 };
 
-// Update Quantity
-const updateCart = async (req,res)=>{
+// Update Cart Quantity
+const updateCart = async (req, res) => {
+  try {
 
-try{
+    const cart = await Cart.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
 
-const cart = await Cart.findByIdAndUpdate(
-req.params.id,
-req.body,
-{new:true}
-);
+    res.json(cart);
 
-res.json(cart);
+  } catch (error) {
 
-}
-catch(error){
+    res.status(500).json({
+      message: error.message
+    });
 
-res.status(500).json({
-message:error.message
-});
-
-}
-
+  }
 };
 
-// Remove Item
-const removeCartItem = async (req,res)=>{
+// Remove Single Item
+const removeCartItem = async (req, res) => {
+  try {
 
-try{
+    await Cart.findByIdAndDelete(req.params.id);
 
-await Cart.findByIdAndDelete(req.params.id);
+    res.json({
+      message: "Item removed from cart"
+    });
 
-res.json({
-message:"Item removed from cart"
-});
+  } catch (error) {
 
-}
-catch(error){
+    res.status(500).json({
+      message: error.message
+    });
 
-res.status(500).json({
-message:error.message
-});
-
-}
-
+  }
 };
 
-// Clear Cart
-const clearCart = async (req,res)=>{
+// Clear Complete Cart
+const clearCart = async (req, res) => {
+  try {
 
-try{
+    await Cart.deleteMany();
 
-await Cart.deleteMany();
+    res.json({
+      message: "Cart cleared successfully"
+    });
 
-res.json({
-message:"Cart cleared"
-});
+  } catch (error) {
 
-}
-catch(error){
+    res.status(500).json({
+      message: error.message
+    });
 
-res.status(500).json({
-message:error.message
-});
-
-}
-
+  }
 };
 
 module.exports = {
-addToCart,
-getCart,
-updateCart,
-removeCartItem,
-clearCart
+  addToCart,
+  getCart,
+  updateCart,
+  removeCartItem,
+  clearCart
 };

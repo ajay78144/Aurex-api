@@ -3,11 +3,11 @@ const express = require("express");
 const router = express.Router();
 
 const {
-addToCart,
-getCart,
-updateCart,
-removeCartItem,
-clearCart
+  addToCart,
+  getCart,
+  updateCart,
+  removeCartItem,
+  clearCart
 } = require("../controllers/cart.controller");
 
 router.post("/", addToCart);
