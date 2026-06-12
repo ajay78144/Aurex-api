@@ -4,9 +4,9 @@ const Cart = require("../models/Cart");
 const addToCart = async (req, res) => {
   try {
 
-    const cart = await Cart.create(req.body);
+    const Cart = await Cart.create(req.body);
 
-    res.status(201).json(cart);
+    res.status(201).json(Cart);
 
   } catch (error) {
 
