@@ -1,4 +1,4 @@
-const Contact = require("../models/contact");
+const Contact = require("../models/Contact");
 
 // Create Message
 const createMessage = async (req,res)=>{
