@@ -3,14 +3,24 @@ const express = require("express");
 const router = express.Router();
 
 const {
-addReview,
-getReviews
-}
-=
-require("../controllers/review.controller");
+  createReview,
+  getReviews,
+  deleteReview,
+    updateReview,
+    getReviewById
+    
+} = require("../controllers/review.controller");
 
-router.post("/",addReview);
+router.post("/", createReview);
 
-router.get("/:productId",getReviews);
+router.get("/", getReviews);
+
+router.delete("/:id", deleteReview);
+
+router.put("/:id", updateReview);
+
+router.get("/:id", getReviewById);
+
+
 
 module.exports = router;
