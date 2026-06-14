@@ -22,6 +22,20 @@ const userSchema = new mongoose.Schema(
         type:String,
         enum:["admin","customer"],
         default:"customer"
+    },
+
+    privacyAccepted:{
+        type:Boolean,
+        default:false
+    },
+
+    termsAccepted:{
+        type:Boolean,
+        default:false
+    },
+
+    acceptedAt:{
+        type:Date
     }
 },
 {
@@ -29,4 +43,4 @@ const userSchema = new mongoose.Schema(
 }
 );
 
-module.exports = mongoose.model("User",userSchema);
+module.exports = mongoose.model("User", userSchema);
