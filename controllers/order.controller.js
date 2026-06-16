@@ -6,7 +6,11 @@ const createOrder = async (req, res) => {
 
     const order = await Order.create(req.body);
 
-    res.status(201).json(order);
+    const newOrder = await Order.findById(order._id)
+      .populate("customer", "name email")
+      .populate("products.product");
+
+    res.status(201).json(newOrder);
 
   } catch (error) {
 
@@ -23,7 +27,8 @@ const getOrders = async (req, res) => {
 
     const orders = await Order.find()
       .populate("customer", "name email")
-      .populate("products.product");
+      .populate("products.product")
+      .sort({ createdAt: -1 });
 
     res.json(orders);
 
@@ -45,9 +50,11 @@ const getOrderById = async (req, res) => {
       .populate("products.product");
 
     if (!order) {
+
       return res.status(404).json({
         message: "Order not found"
       });
+
     }
 
     res.json(order);
@@ -71,12 +78,16 @@ const updateOrder = async (req, res) => {
       {
         new: true
       }
-    );
+    )
+    .populate("customer", "name email")
+    .populate("products.product");
 
     if (!order) {
+
       return res.status(404).json({
         message: "Order not found"
       });
+
     }
 
     res.json(order);
@@ -99,9 +110,11 @@ const deleteOrder = async (req, res) => {
     );
 
     if (!order) {
+
       return res.status(404).json({
         message: "Order not found"
       });
+
     }
 
     res.json({
