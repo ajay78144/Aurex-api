@@ -1,12 +1,14 @@
 const Cart = require("../models/Cart");
 
+// ===============================
 // Add To Cart
+// ===============================
 const addToCart = async (req, res) => {
   try {
 
-    const Cart = await Cart.create(req.body);
+    const cart = await Cart.create(req.body);
 
-    res.status(201).json(Cart);
+    res.status(201).json(cart);
 
   } catch (error) {
 
@@ -17,15 +19,17 @@ const addToCart = async (req, res) => {
   }
 };
 
-// Get Cart Items
+// ===============================
+// Get All Cart Items
+// ===============================
 const getCart = async (req, res) => {
   try {
 
     const cartItems = await Cart.find()
-      .populate("user")
+      .populate("user", "name email")
       .populate("product");
 
-    res.json(cartItems);
+    res.status(200).json(cartItems);
 
   } catch (error) {
 
@@ -36,17 +40,54 @@ const getCart = async (req, res) => {
   }
 };
 
+// ===============================
+// Get Single Cart Item
+// ===============================
+const getCartById = async (req, res) => {
+  try {
+
+    const cart = await Cart.findById(req.params.id)
+      .populate("user", "name email")
+      .populate("product");
+
+    if (!cart) {
+      return res.status(404).json({
+        message: "Cart item not found"
+      });
+    }
+
+    res.status(200).json(cart);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+};
+
+// ===============================
 // Update Cart Quantity
+// ===============================
 const updateCart = async (req, res) => {
   try {
 
     const cart = await Cart.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      {
+        new: true
+      }
     );
 
-    res.json(cart);
+    if (!cart) {
+      return res.status(404).json({
+        message: "Cart item not found"
+      });
+    }
+
+    res.status(200).json(cart);
 
   } catch (error) {
 
@@ -57,14 +98,22 @@ const updateCart = async (req, res) => {
   }
 };
 
-// Remove Single Item
+// ===============================
+// Delete Single Cart Item
+// ===============================
 const removeCartItem = async (req, res) => {
   try {
 
-    await Cart.findByIdAndDelete(req.params.id);
+    const cart = await Cart.findByIdAndDelete(req.params.id);
 
-    res.json({
-      message: "Item removed from cart"
+    if (!cart) {
+      return res.status(404).json({
+        message: "Cart item not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Item removed from cart successfully"
     });
 
   } catch (error) {
@@ -76,13 +125,15 @@ const removeCartItem = async (req, res) => {
   }
 };
 
+// ===============================
 // Clear Complete Cart
+// ===============================
 const clearCart = async (req, res) => {
   try {
 
-    await Cart.deleteMany();
+    await Cart.deleteMany({});
 
-    res.json({
+    res.status(200).json({
       message: "Cart cleared successfully"
     });
 
@@ -98,6 +149,7 @@ const clearCart = async (req, res) => {
 module.exports = {
   addToCart,
   getCart,
+  getCartById,
   updateCart,
   removeCartItem,
   clearCart
