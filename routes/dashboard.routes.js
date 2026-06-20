@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
   getDashboardStats
-} = require("../controllers/dashboard..controller");
+} = require("../controllers/dashboard.controller");
 
 router.get("/", getDashboardStats);
 
