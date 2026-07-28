@@ -8,6 +8,12 @@ const categorySchema = new mongoose.Schema(
         unique:true
     },
 
+    slug:{
+        type:String,
+        required:true,
+        unique:true
+    },
+
     description:{
         type:String
     },
@@ -15,10 +21,11 @@ const categorySchema = new mongoose.Schema(
     image:{
         type:String
     }
+
 },
 {
     timestamps:true
 }
 );
 
-module.exports = mongoose.model("Category",categorySchema);
+module.exports = mongoose.model("Category", categorySchema);

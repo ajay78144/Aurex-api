@@ -1,5 +1,6 @@
 const Banner = require("../models/Banner");
 
+
 // Create Banner
 const createBanner = async (req, res) => {
   try {
@@ -14,26 +15,17 @@ const createBanner = async (req, res) => {
 };
 
 // Get All Banners
-const getBanners = async (req, res) => {
-  try {
-    const banners = await Banner.find();
-
-    res.json(banners);
-  } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
+   const getBanners = async (req, res) => {
+   try {const banners = await Banner.find();
+   res.json(banners);}
+   catch (error) {res.status(500).json({message: error.message,});}
 };
 
 // Get Banner By ID
 const getBannerById = async (req, res) => {
-  try {
-    const banner = await Banner.findById(req.params.id);
-
+  try {const banner = await Banner.findById(req.params.id);
     if (!banner) {
-      return res.status(404).json({
-        message: "Banner not found",
+      return res.status(404).json({ message: "Banner not found",
       });
     }
 

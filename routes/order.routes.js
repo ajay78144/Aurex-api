@@ -7,7 +7,8 @@ createOrder,
 getOrders,
 getOrderById,
 deleteOrder,
-updateOrder
+updateOrder,
+getOrdersByUserId
 
 }
 =
@@ -16,6 +17,8 @@ require("../controllers/order.controller");
 router.post("/",createOrder);
 
 router.get("/",getOrders);
+
+router.get("/user/:userId", getOrdersByUserId);
 
 router.get("/:id",getOrderById);
 
