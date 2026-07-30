@@ -5,10 +5,10 @@ const generateToken = require("../utils/generateToken");
 // Register User
 const registerUser = async (req, res) => {
   try {
-
     const {
       name,
       email,
+      phone,
       password,
       privacyAccepted,
       termsAccepted
@@ -33,6 +33,7 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
+      phone,
       password: hashedPassword,
       privacyAccepted,
       termsAccepted,
@@ -40,28 +41,29 @@ const registerUser = async (req, res) => {
     });
 
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      privacyAccepted: user.privacyAccepted,
-      termsAccepted: user.termsAccepted,
-      token: generateToken(user._id)
+      message: "User registered successfully",
+      token: generateToken(user._id),
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        privacyAccepted: user.privacyAccepted,
+        termsAccepted: user.termsAccepted
+      }
     });
 
   } catch (error) {
-
     res.status(500).json({
       message: error.message
     });
-
   }
 };
 
 // Login User
 const loginUser = async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
@@ -70,17 +72,18 @@ const loginUser = async (req, res) => {
       user &&
       await bcrypt.compare(password, user.password)
     ) {
-
       return res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        privacyAccepted: user.privacyAccepted,
-        termsAccepted: user.termsAccepted,
-        token: generateToken(user._id)
+        token: generateToken(user._id),
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          privacyAccepted: user.privacyAccepted,
+          termsAccepted: user.termsAccepted
+        }
       });
-
     }
 
     res.status(401).json({
@@ -88,15 +91,83 @@ const loginUser = async (req, res) => {
     });
 
   } catch (error) {
-
     res.status(500).json({
       message: error.message
     });
+  }
+};
 
+// Get User Profile
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    res.json({
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        privacyAccepted: user.privacyAccepted,
+        termsAccepted: user.termsAccepted
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+// Update User Profile
+const updateUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.phone = req.body.phone !== undefined ? req.body.phone : user.phone;
+
+    if (req.body.password) {
+      user.password = await bcrypt.hash(req.body.password, 10);
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        role: updatedUser.role,
+        privacyAccepted: updatedUser.privacyAccepted,
+        termsAccepted: updatedUser.termsAccepted
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  getUserProfile,
+  updateUserProfile
 };
