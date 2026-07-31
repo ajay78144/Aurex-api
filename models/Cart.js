@@ -84,11 +84,9 @@ unique:true
 
 // Calculate total before save
 
-cartSchema.pre("save",function(next){
+cartSchema.pre("save",function(){
 
 this.total=this.price*this.quantity;
-
-next();
 
 });
 
