@@ -4,21 +4,8 @@ const Product = require("../models/Product");
 const normalizeProduct = (product) => {
   if (!product) return null;
   const p = product.toObject ? product.toObject() : product;
-  if (!p.images || p.images.length === 0 || !p.images[0]) {
-    const categoryName = (p.category?.name || '').toLowerCase();
-    let defaultImg = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600';
-    if (categoryName.includes('shirt') || categoryName.includes('tshirt') || categoryName.includes('wear') || categoryName.includes('cloth') || categoryName.includes('pant') || categoryName.includes('jeans')) {
-      defaultImg = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600';
-    } else if (categoryName.includes('shoe') || categoryName.includes('sneaker') || categoryName.includes('footwear')) {
-      defaultImg = 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600';
-    } else if (categoryName.includes('watch')) {
-      defaultImg = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600';
-    } else if (categoryName.includes('bag') || categoryName.includes('backpack')) {
-      defaultImg = 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600';
-    } else if (categoryName.includes('gadget') || categoryName.includes('electronic') || categoryName.includes('phone') || categoryName.includes('headphone')) {
-      defaultImg = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600';
-    }
-    p.images = [defaultImg];
+  if (!p.images) {
+    p.images = [];
   }
   return p;
 };

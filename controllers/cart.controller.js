@@ -30,16 +30,8 @@ const addToCart = async (req, res) => {
 
         }
 
-        // Check Stock
+        // Check Stock bypassed to support simple ecommerce flow
 
-        if (findProduct.stock < quantity) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Product out of stock"
-            });
-
-        }
 
         // Already Exists
 
@@ -52,14 +44,6 @@ const addToCart = async (req, res) => {
 
             cart.quantity += quantity;
 
-            if (cart.quantity > findProduct.stock) {
-
-                return res.status(400).json({
-                    success: false,
-                    message: "Stock limit exceeded"
-                });
-
-            }
 
             cart.price = findProduct.offerPrice > 0
                 ? findProduct.offerPrice
@@ -222,17 +206,8 @@ const updateQuantity = async (req, res) => {
 
         }
 
-        if (quantity > cart.product.stock) {
+        // Stock limit bypassed
 
-            return res.status(400).json({
-
-                success: false,
-
-                message: "Stock Not Available"
-
-            });
-
-        }
 
         cart.quantity = quantity;
 
@@ -292,17 +267,8 @@ const increaseQuantity = async (req, res) => {
 
         }
 
-        if (cart.quantity >= cart.product.stock) {
+        // Stock limit bypassed
 
-            return res.status(400).json({
-
-                success: false,
-
-                message: "Maximum Stock Reached"
-
-            });
-
-        }
 
         cart.quantity++;
 
