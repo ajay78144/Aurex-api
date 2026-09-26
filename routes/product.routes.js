@@ -1,53 +1,67 @@
-const express = require("express");
-
+const express = require('express');
 const router = express.Router();
-
 const {
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+  searchProducts,
+  getProductsByCategory,
+  filterProducts,
+  getLatestProducts,
+  getFeaturedProducts,
+  getTrendingProducts,
+  getFlashSaleProducts,
+  getBestSellerProducts,
+} = require('../controllers/product.controller');
+const protect = require('../middleware/auth.middleware');
+const isAdmin = require('../middleware/admin.js');
 
-    createProduct,
-    getProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-    searchProducts,
-    getProductsByCategory
+// ─── Special / named routes (must come BEFORE /:id) ──────────────────────────
 
-} = require("../controllers/product.controller");
+// GET /api/products/filter?keyword=&category=&minPrice=&maxPrice=&sort=
+router.get('/filter', filterProducts);
 
+// GET /api/products/latest
+router.get('/latest', getLatestProducts);
 
-// Create Product
+// GET /api/products/featured
+router.get('/featured', getFeaturedProducts);
 
-router.post("/", createProduct);
+// GET /api/products/trending
+router.get('/trending', getTrendingProducts);
 
+// GET /api/products/flash-sale
+router.get('/flash-sale', getFlashSaleProducts);
 
-// Get All Products
+// GET /api/products/best-sellers
+router.get('/best-sellers', getBestSellerProducts);
 
-router.get("/", getProducts);
+// GET /api/products/search/:keyword  (path param style)
+router.get('/search/:keyword', searchProducts);
 
+// GET /api/products/search?keyword=  (query param style)
+router.get('/search', searchProducts);
 
-// Search
+// GET /api/products/category/:categoryId
+router.get('/category/:categoryId', getProductsByCategory);
 
-router.get("/search", searchProducts);
+// ─── CRUD routes ─────────────────────────────────────────────────────────────
 
+// GET  /api/products
+router.get('/', getProducts);
 
-// Products By Category
+// POST /api/products  (admin)
+router.post('/', protect, isAdmin, createProduct);
 
-router.get("/category/:categoryId", getProductsByCategory);
+// GET  /api/products/:id
+router.get('/:id', getProductById);
 
+// PUT  /api/products/:id  (admin)
+router.put('/:id', protect, isAdmin, updateProduct);
 
-// Get Product By ID
-
-router.get("/:id", getProductById);
-
-
-// Update
-
-router.put("/:id", updateProduct);
-
-
-// Delete
-
-router.delete("/:id", deleteProduct);
-
+// DELETE /api/products/:id  (admin)
+router.delete('/:id', protect, isAdmin, deleteProduct);
 
 module.exports = router;

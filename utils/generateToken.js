@@ -1,15 +1,14 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const generateToken = (id) => {
-
-    return jwt.sign(
-        {id},
-        process.env.JWT_SECRET,
-        {
-            expiresIn:"30d"
-        }
-    );
-
+// Access token (short-lived, used as main token for backward compat)
+const generateToken = (id, role, email) => {
+  return jwt.sign(
+    { id, role: role || 'customer', email: email || '' },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+    }
+  );
 };
 
 module.exports = generateToken;

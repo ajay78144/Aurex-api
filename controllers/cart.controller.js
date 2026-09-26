@@ -438,11 +438,34 @@ const clearCart = async (req, res) => {
 };
 
 
+/*
+==========================================
+Get All Carts
+==========================================
+*/
+
+const getAllCarts = async (req, res) => {
+    try {
+        const carts = await Cart.find()
+            .populate("user")
+            .populate("product");
+        res.json(carts);
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+
 module.exports = {
 
     addToCart,
 
     getCart,
+
+    getAllCarts,
 
     updateQuantity,
 

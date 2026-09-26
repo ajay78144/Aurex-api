@@ -1,90 +1,113 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
-{
-    name:{
-        type:String,
-        required:true
+  {
+    name: {
+      type: String,
+      required: true,
     },
-
-    slug:{
-        type:String,
-        required:true,
-        unique:true
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
     },
-
-    description:{
-        type:String,
-        required:true
+    description: {
+      type: String,
+      required: true,
     },
-
-    price:{
-        type:Number,
-        required:true
+    price: {
+      type: Number,
+      required: true,
     },
-
-    offerPrice:{
-        type:Number,
-        default:0
+    offerPrice: {
+      type: Number,
+      default: 0,
     },
-
-    gender:{
-        type:String,
-        enum:["boys","girls"]
+    gender: {
+      type: String,
+      enum: ['boys', 'girls', 'unisex', 'men', 'women'],
     },
-
-    category:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Category"
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
     },
-
-    images:[
-        {
-            type:String
-        }
+    images: [
+      {
+        type: String,
+      },
     ],
-
-    colors:[
-        {
-            type:String
-        }
+    colors: [
+      {
+        type: String,
+      },
     ],
-
-    sizes:[
-        {
-            type:String
-        }
+    sizes: [
+      {
+        type: String,
+      },
     ],
-
-    stock:{
-        type:Number,
-        default:10
+    stock: {
+      type: Number,
+      default: 10,
     },
-
-    rating:{
-        type:Number,
-        default:0
+    rating: {
+      type: Number,
+      default: 0,
     },
-
-    featured:{
-        type:Boolean,
-        default:false
+    numReviews: {
+      type: Number,
+      default: 0,
     },
-
-    trending:{
-        type:Boolean,
-        default:false
+    // Visibility flags
+    featured: {
+      type: Boolean,
+      default: false,
     },
-
-    newArrival:{
-        type:Boolean,
-        default:false
-    }
-
-},
-{
-    timestamps:true
-}
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    trending: {
+      type: Boolean,
+      default: false,
+    },
+    isTrending: {
+      type: Boolean,
+      default: false,
+    },
+    newArrival: {
+      type: Boolean,
+      default: false,
+    },
+    isFlashSale: {
+      type: Boolean,
+      default: false,
+    },
+    flashSalePrice: {
+      type: Number,
+      default: null,
+    },
+    flashSaleEndsAt: {
+      type: Date,
+      default: null,
+    },
+    isBestSeller: {
+      type: Boolean,
+      default: false,
+    },
+    tags: [
+      {
+        type: String,
+      },
+    ],
+    brand: {
+      type: String,
+      default: '',
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-module.exports = mongoose.model("Product",productSchema);
+module.exports = mongoose.model('Product', productSchema);
